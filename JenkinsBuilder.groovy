@@ -67,10 +67,8 @@ def slavePodTemplate = """
                             println('Pushing the image to latest version!!')
                             sh "docker tag artemis aigerimmadenova/artemis:latest"
                             sh "docker push aigerimmadenova/artemis:latest"
-                        } else {
-                            println("Pushing the ${branch} version.")
-                        }
-                        println(branch)
+                        } 
+                        
                         sh "docker tag artemis aigerimmadenova/artemis:${branch}"
                         sh "docker push aigerimmadenova/artemis:${branch}"
                     }
