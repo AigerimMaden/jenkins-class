@@ -48,6 +48,10 @@ def slavePodTemplate = """
                 stage('Docker Build') {
                     sh 'docker build -t artemis .'
                 }
+                stage('Docker Push') {
+                    sh 'docker tag -t artemis fsadykov/artemis'
+                    sh 'docker push fsadykov/artemis'
+                }
             }
             stage('checking') {
                 sh 'ls -l'
