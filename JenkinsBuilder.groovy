@@ -13,11 +13,10 @@ if (branch == "master") {
   println("The application will be deployed to qa environment!")
   environment = "qa"
 } else {
-  println('Please use proper name for your branch')
-  currentBuild.result = 'FAILURE'
-    println("ERROR Detected:")
+  println('Please use proper name for your branch!')
+  currentBuild.result = 'FAILURE'	      
+  error('Please use proper name for your branch!')
 }
-
 
 properties([
     [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false], 
