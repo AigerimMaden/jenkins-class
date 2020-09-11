@@ -1,6 +1,13 @@
 // Uniq name for the pod or slave 
 def k8slabel = "jenkins-pipeline-${UUID.randomUUID().toString()}"
 def branch = "${scm.branches[0].name}".replaceAll(/^\*\//, '')
+
+properties([
+  [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false], 
+  parameters([
+    booleanParam(defaultValue: false, description: 'Select to be able to push to latest', name: 'pushLatest')
+    ])
+  ])
 // yaml def for slaves 
 def slavePodTemplate = """
       metadata:
