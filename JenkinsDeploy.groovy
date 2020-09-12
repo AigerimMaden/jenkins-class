@@ -46,39 +46,34 @@ def slavePodTemplate = """
             hostPath:
               path: /var/run/docker.sock
     """
+
     podTemplate(name: k8slabel, label: k8slabel, yaml: slavePodTemplate, showRawYaml: false) {
-      node(k8slabel) {
-        stage("Checkout SCM") {
-            git 'https://github.com/AigerimMaden/jenkins-class.git'
-        }
-
-
-        stage("Apply Plan") {
-            container("fuchicorptools") {
-                if (!params.destroyChanges) {
-                    if (params.applyChanges) {
-                        println("Applying the changes!")
-                    } else {
-                        println("Planing the changes")
+            node(k8slabel) {
+                container("fuchicorptools") {
+                    stage("Pull the SCM") {
+                        git 'https://github.com/fsadykov/jenkins-class'
+                    }
+                    dir('deployments/k8s') {
+                        stage("Apply/Plan") {
+                            if (!params.destroyChanges) {
+                                if (params.applyChanges) {
+                                    println("Applying the changes!")
+                                } else {
+                                    println("Planing the changes")
+                                }
+                            }
+                        }
+                        stage("Destroy") {
+                            if (!params.applyChanges) {
+                                if (params.destroyChanges) {
+                                    println("Destroying everything")
+                                } 
+                            } else {
+                                println("Sorry I can not destroy and apply!!")
+                            }
+                        }
                     }
                 }
-
-
-
-
-
-                sh 'kubectl version'
             }
         }
 
-        stage("destroy") {
-            if (!params.applyChanges) {
-                if (params.destroyChanges) {
-                    println("Destroying everything")
-                } 
-            } else {
-                println("Sorry I can not destroy and apply!")
-            }
-        }
-      }
-    }
