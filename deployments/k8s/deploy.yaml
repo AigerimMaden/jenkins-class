@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: artemis-deploy
+  name: artemis-deploy
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      run: artemis-deploy
+  template:
+    metadata:
+      labels:
+        run: artemis-deploy
+    spec:
+      containers:
+      - image: fsadykov/artemis:latest
+        name: artemis-deploy
+        ports:
+        - containerPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    run: artemis-deploy
+  name: artemis-deploy
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 5000
+  selector:
+    run: artemis-deploy
+  type: LoadBalancer
+status:
+  loadBalancer: {}
