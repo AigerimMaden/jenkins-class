@@ -13,19 +13,6 @@ properties([
 
 
 
-println(
-    """
-    Apply changes: ${params.applyChanges}
-    Destroy changes: ${params.destroyChanges}
-    Docker  image:  ${params.selectedDockerImage}
-    Environment: ${params.environment}
-    """
-)
-
-
-
-
-
 def slavePodTemplate = """
       metadata:
         labels:
@@ -68,6 +55,18 @@ def slavePodTemplate = """
 
         stage("Apply Plan") {
             container("fuchicorptools") {
+                if (!params.destroyChanges) {
+                    if (params.applyChanges) {
+                        println("Applying the changes!")
+                    } else {
+                        println("Planing the changes")
+                    }
+                }
+
+
+
+
+
                 sh 'kubectl version'
             }
         }
