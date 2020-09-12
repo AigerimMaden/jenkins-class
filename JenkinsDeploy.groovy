@@ -72,8 +72,8 @@ def slavePodTemplate = """
         }
 
         stage("destroy") {
-            if (!applyChanges) {
-                if (destroyChanges) {
+            if (!params.applyChanges) {
+                if (params.destroyChanges) {
                     println("Destroying everything")
                 } 
             } else {
